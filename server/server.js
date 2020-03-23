@@ -9,6 +9,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 //connect to mongo
+console.log('DDDDDDDDD', process.env.DATABASE)
 mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useFindAndModify: false,
@@ -16,6 +17,11 @@ mongoose.connect(process.env.DATABASE, {
     useCreateIndex: true
 }).then(() => console.log('db connected'))
 .catch(err => console.log('DB ERR', err))
+// mongoose.connect('mongodb://127.0.0.1/my_database', { useNewUrlParser: true });
+//Get the default connection
+
+
+
 
 // import routes
 const authRoutes = require('./routes/auth');

@@ -42,22 +42,26 @@ exports.signup = (req, res) => {
             html: `<h1>Have the most fun you can in a car!</h1><p>Get your <b>Tesla</b> today!</p><p>${process.env.CLIENT_URL}/auth/activate/${token}</p>`
         };
 
-
-
-        transport.sendMail(message, (err, info) => {
-            if (err) {
-                return res.status(400).json({
-                    error: 'Email send error'
-                })
-            } else {
-                console.log('mail success', info);
-                res.status(200).json({
-                    msg: 'Action Email sent'
-                })
-            }
-        });
-
-
+        if(process.env.ENVIRONMENT == 'development') {
+            res.status(200).json({
+                msg: 'Action Email sent',
+                token: token
+            })
+        } else {
+            transport.sendMail(message, (err, info) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: 'Email send error',
+                        token: token
+                    })
+                } else {
+                    console.log('mail success', info);
+                    res.status(200).json({
+                        msg: 'Action Email sent'
+                    })
+                }
+            });
+        }
     })
 }
 

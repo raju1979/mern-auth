@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+
+import {connect} from 'react-redux';
+import {fetchUser} from '../redux';
+import {compose} from 'redux'
 
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
@@ -34,13 +38,13 @@ const styles = theme => ({
 
 const Login = (props) => {
 
-  console.log(props)
+  // console.log(props)
 
   const { classes } = props;
   const [login, setLogin] = useState({ email: '', password: '' });
+  const [loading, setLoading] = useState(false);
 
   const changeTextHandler = e => {
-    console.log(e.target.value);
     setLogin({
       ...login,
       [e.target.name]: e.target.value
@@ -49,7 +53,11 @@ const Login = (props) => {
 
   const onSubmit = (e) => {
     console.log('submitted', login);
-    props.history.push('/home')
+    // props.history.push('/home');
+    // useEffect(() => {
+    //   fetchUser({})
+    // });
+    props.fetchUser(login)
     e.preventDefault();
   }
 
@@ -90,6 +98,18 @@ const Login = (props) => {
   )
 
 
-}
+};
 
-export default withStyles(styles)(Login);
+const mapStateToProps = (state, props) => {
+  return {
+    user: state.user
+  }
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    fetchUser: (user) => dispatch(fetchUser(user))
+  }
+};
+
+export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(Login);
